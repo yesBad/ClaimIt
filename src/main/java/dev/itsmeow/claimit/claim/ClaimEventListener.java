@@ -28,6 +28,7 @@ import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import java.util.regex.*;
 
 @Mod.EventBusSubscriber(modid = ClaimIt.MOD_ID)
 public class ClaimEventListener implements IWorldEventListener {
@@ -107,6 +108,27 @@ public class ClaimEventListener implements IWorldEventListener {
                         }
                     }
                 }
+            }
+        }
+        String getterblock = newState.getBlock().toString();
+        String regex1 = "hellfire|frostfire|doomfire|icefire|primefire|scorchfire|shadowfire|smitefire";
+        Pattern COMP = Pattern.compile(regex1, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = COMP.matcher(getterblock);
+        boolean matchFound = matcher.find();
+        if(matchFound) {
+            String getterblock1 = oldState.getBlock().toString();
+            Matcher matcher1 = COMP.matcher(getterblock1);
+            boolean matchFound1 = matcher1.find();
+            for(EnumFacing facing : EnumFacing.VALUES) {
+                BlockPos posF = pos.offset(facing);
+                    ClaimArea claim = ClaimManager.getManager().getClaimAtLocation(world, posF);
+                        if(claim != null){
+                            if(!matchFound1) {
+                                world.setBlockState(pos, oldState);
+                            } else {
+                                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                            }
+                        }
             }
         }
     }

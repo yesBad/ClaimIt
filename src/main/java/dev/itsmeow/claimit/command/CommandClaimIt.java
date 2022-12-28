@@ -80,7 +80,7 @@ public class CommandClaimIt extends CommandCITreeBase {
 
     @Override
     public void executeBaseCommand(MinecraftServer server, ICommandSender sender, String[] args) {
-        sendMessage(sender, new FTC(GRAY, Form.BOLD, ClaimIt.NAME), new FTC(" Version ", DARK_PURPLE, false), new FTC(ClaimIt.VERSION, YELLOW, false), new FTC(" by ", DARK_PURPLE, false), new FTC(DARK_RED, Form.BOLD, "its_meow"));
+        sendMessage(sender, new FTC(GRAY, Form.BOLD, ClaimIt.NAME), new FTC(" Version ", DARK_PURPLE, false), new FTC(ClaimIt.VERSION, YELLOW, false), new FTC(" by ", DARK_PURPLE, false), new FTC(DARK_RED, Form.BOLD, "its_meow & yesBad"));
         sendMessage(sender, new FTC(GRAY, Form.BOLD, ClaimItAPI.NAME), new FTC(" Version ", DARK_PURPLE, false), new FTC(ClaimItAPI.VERSION, YELLOW, false));
         sendMessage(sender, new FTC(BLUE, "Claiming item is "), new TextComponentString("" + RESET + GREEN + ITALIC + ClaimItConfig.claim_create_item_display));
         sendMessage(sender, AQUA, Form.BOLD, "Subcommands: ");
