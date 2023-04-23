@@ -387,16 +387,18 @@ public class ProtectionEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPlayerAttack(net.minecraftforge.event.entity.player.AttackEntityEvent e) {
+        EntityPlayer player = e.getEntityPlayer();
         World world = e.getEntity().getEntityWorld();
         BlockPos pos = e.getEntity().getPosition();
+        EntityLivingBase entity = e.getEntityLiving();
         ClaimManager cm = ClaimManager.getManager();
         ClaimArea claim = cm.getClaimAtLocation(world, pos);
-        if(claim != null || cm.getClaimAtLocation(world, e.getEntityPlayer().getPosition()) != null) {
-            EntityPlayer player = e.getEntityPlayer();
+        ClaimArea claim2 = cm.getClaimAtLocation(entity.getEntityWorld(), player.getPosition());
+        if(claim != null || claim2 != null || cm.getClaimAtLocation(world, e.getEntityPlayer().getPosition()) != null || cm.getClaimAtLocation(entity.getEntityWorld(), player.getPosition()) != null) {
             if(e.getTarget() instanceof EntityPlayer) {
-                e.setCanceled(!claim.getMostSpecificClaim(pos).canPVP(player)  || ClaimItConfig.forceNoPVPInClaim);
+                e.setCanceled(!claim.getMostSpecificClaim(pos).canPVP(player) || ClaimItConfig.forceNoPVPInClaim);
             } else {
-                e.setCanceled(!claim.getMostSpecificClaim(pos).canEntity(player));
+                e.setCanceled((claim != null) || (claim2 != null));
             }
         }
     }
@@ -413,7 +415,7 @@ public class ProtectionEventHandler {
                 if(entity instanceof EntityPlayer) { // whether the damaged is a player or not
                     e.setCanceled((claim != null && !claim.getMostSpecificClaim(player.getPosition()).canPVP(player)) || (claim2 != null && !claim2.getMostSpecificClaim(entity.getPosition()).canPVP(player))  || ClaimItConfig.forceNoPVPInClaim); // if either one disallows PVP block it
                 } else {
-                    e.setCanceled((claim != null && !claim.getMostSpecificClaim(player.getPosition()).canEntity(player)) || (claim2 != null && !claim2.getMostSpecificClaim(entity.getPosition()).canEntity(player))); // if either one disallows entity block it
+                    e.setCanceled((claim != null) || (claim2 != null)); // if either one disallows entity block it
                 }
             }
             ClaimArea claim = ClaimManager.getManager().getClaimAtLocation(entity.getEntityWorld(), entity.getPosition());
